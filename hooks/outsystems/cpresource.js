@@ -26,14 +26,13 @@ module.exports = function (ctx) {
     }
   }
 
-
-  debugger;
   var projectRoot = ctx.opts.projectRoot;
   var androidPath = path.join(projectRoot, "platforms", "android");
   var wwwpath = path.join(androidPath, "assets/www");
-  var googleServiceFile = path.join(wwwpath, "google-services.json");
-  if (fs.existsSync(googleServiceFile)) {
+  var configPath = path.join(wwwpath, "google-services");
+  var googleServiceFile = path.join(configPath, "google-services.json");
 
+  if (fs.existsSync(googleServiceFile)) {
     copyFile(googleServiceFile, path.join(androidPath, "google-services.json"), function (err) {
       if (err !== undefined) {
         deferral.reject(new CordovaError("Failed to copy google-services.json file..."));
@@ -43,7 +42,7 @@ module.exports = function (ctx) {
     });
 
   } else {
-    deferral.reject(new CordovaError("google-services.json file not found on the resources."));
+    deferral.reject(new CordovaError("google-services.json file not found under google-services folder in the resources."));
   }
 
   return deferral.promise;
